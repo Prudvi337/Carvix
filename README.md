@@ -6,12 +6,6 @@
 - [Key Features](#key-features)
 - [How It Works](#how-it-works)
 - [Technology Stack](#technology-stack)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Sustainability Focus](#sustainability-focus)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ## Introduction
 Carvix is an innovative platform designed to streamline vehicle design processes and enable real-time customization for both Original Equipment Manufacturers (OEMs) and customers using cutting-edge AI technology. Our goal is to bridge the gap between creativity and engineering standards, delivering a seamless customization experience without sacrificing performance or sustainability.
