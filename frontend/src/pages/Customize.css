@@ -1,0 +1,65 @@
+.customize { 
+    text-align: center;
+    padding: 20px;
+    background-color: #000000;
+}
+
+.customize h1 {
+    margin-bottom: 30px;
+    background: linear-gradient(98.43deg, #C0362C 12.91%, #4169E1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent; 
+}
+.car-models {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.car-model {
+    width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.car-model img {
+    width: 100%;
+    height: auto;
+}
+
+.car-model h2 {
+    color: #c0bbbb;
+    margin: 15px 0;
+}
+
+.car-model p {
+    font-size: 0.9em;
+    color: #c0bcbc;
+    padding: 0 15px;
+}
+
+/* Updated button styles with gradient */
+.car-model button {
+    margin: 10px 0;
+    padding: 10px 20px;
+    background: linear-gradient(98.43deg, #C0362C 12.91%, #4169E1 100%);  /* Normal gradient */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.car-model button:hover {
+    background: linear-gradient(98.43deg, #4169E1 12.91%, #C0362C 100%);  /* Reversed gradient on hover */
+}
+
+.car-model:hover {
+    transform: scale(1.05);
+}
