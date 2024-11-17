@@ -1,3 +1,4 @@
+[Note: This code is only for the prototype]
 # Carvix - Revolutionizing Vehicle Customization with AI
 
 ## Table of Contents
