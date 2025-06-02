@@ -5,7 +5,7 @@
 > **Personalize. Visualize. Revolutionize.**  
 > An immersive platform where design meets intelligence. Customize cars in 3D, preview in AR, and get AI-powered suggestions—all in real time.
 
-![Carvix Banner](https://images.unsplash.com/photo-1584467735871-a2189f82f38e?auto=format&fit=crop&w=1350&q=80)
+![Carvix Banner](https://images.unsplash.com/photo-1739613563958-9b8751121726?auto=format&fit=crop&w=1350&q=80)
 
 ---
 
@@ -52,7 +52,7 @@
 
 | 3D Car Customizer | AR Preview | AI Suggestions |
 |-------------------|------------|----------------|
-| ![3D View](https://cdn.motor1.com/images/mgl/8ANvWq/s1/2023-bmw-i7-xdrive60.jpg) | ![AR Preview](https://cdn.arstechnica.net/wp-content/uploads/2020/09/AR-car-760x380.jpg) | ![AI Suggestions](https://www.analyticsinsight.net/wp-content/uploads/2021/11/AI-in-Car-Design.jpg) |
+| ![3D View](https://images.unsplash.com/photo-1739613562425-c10d7bfc2352?auto=format&fit=crop&w=600&q=80) | ![AR Preview](https://plus.unsplash.com/premium_photo-1733317438378-1d6a0b8e65e7?auto=format&fit=crop&w=600&q=80) | ![AI Suggestions](https://images.unsplash.com/photo-1581091871235-868c13b39a42?auto=format&fit=crop&w=600&q=80) |
 
 ---
 
