@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
@@ -9,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, CreditCard, Truck, ShieldCheck, CheckCircle } from "lucide-react";
+import { orderService } from "@/services/orderService";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -65,30 +65,31 @@ const Checkout = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API request
-    setTimeout(() => {
-      setIsSubmitting(false);
-      
-      toast({
-        title: "Order Placed Successfully",
-        description: "You will receive a confirmation email shortly.",
-      });
-      
-      // Store order details in local storage for the confirmation page
+    try {
       const orderDetails = {
-        orderId: "ORD-" + Date.now(),
         customerName: `${personalInfo.firstName} ${personalInfo.lastName}`,
         email: personalInfo.email,
         deliveryAddress: `${deliveryInfo.address}, ${deliveryInfo.city}, ${deliveryInfo.state} ${deliveryInfo.zipCode}`,
         estimatedDelivery: "May 25, 2025",
         totalAmount: totalPrice,
-        buildDetails: buildData
+        buildDetails: buildData,
       };
-      
-      localStorage.setItem('orderDetails', JSON.stringify(orderDetails));
-      navigate('/confirmation');
-    }, 2000);
+      // Create order in Firestore
+      const orderId = await orderService.createOrder(orderDetails);
+      setIsSubmitting(false);
+      toast({
+        title: "Order Placed Successfully",
+        description: "You will receive a confirmation email shortly.",
+      });
+      navigate(`/confirmation?orderId=${orderId}`);
+    } catch (error: any) {
+      setIsSubmitting(false);
+      toast({
+        title: "Order Failed",
+        description: error.message || "An error occurred while placing your order.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleBack = () => {

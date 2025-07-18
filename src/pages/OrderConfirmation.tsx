@@ -1,10 +1,10 @@
-
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Home, Truck, Calendar, Phone, Mail, MapPin, Share2 } from "lucide-react";
+import { orderService, Order } from "@/services/orderService";
 
 interface OrderDetails {
   orderId: string;
@@ -18,17 +18,32 @@ interface OrderDetails {
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
-  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
+  const [orderDetails, setOrderDetails] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    // Get order data from localStorage
-    const storedDetails = localStorage.getItem('orderDetails');
-    if (storedDetails) {
-      setOrderDetails(JSON.parse(storedDetails));
+    const orderId = searchParams.get('orderId');
+    if (!orderId) {
+      setError('No order ID provided.');
+      setIsLoading(false);
+      return;
     }
-    setIsLoading(false);
-  }, []);
+    orderService.getOrderById(orderId)
+      .then(order => {
+        if (order) {
+          setOrderDetails(order);
+        } else {
+          setError('Order not found.');
+        }
+        setIsLoading(false);
+      })
+      .catch(err => {
+        setError('Failed to fetch order.');
+        setIsLoading(false);
+      });
+  }, [searchParams]);
 
   const handleBackToHome = () => {
     navigate('/');
@@ -39,6 +54,24 @@ const OrderConfirmation = () => {
       <Layout>
         <div className="container mx-auto px-4 py-16 flex items-center justify-center">
           <div className="w-12 h-12 border-4 border-primary-300 border-t-primary-600 rounded-full animate-spin"></div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-16 flex items-center justify-center">
+          <Card className="max-w-lg w-full">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl text-red-500">Error</CardTitle>
+            </CardHeader>
+            <CardContent className="text-center">
+              <p className="mb-6">{error}</p>
+              <Button onClick={handleBackToHome}>Return to Homepage</Button>
+            </CardContent>
+          </Card>
         </div>
       </Layout>
     );
@@ -80,7 +113,7 @@ const OrderConfirmation = () => {
             <CardHeader className="bg-primary-50/50 dark:bg-primary-950/20">
               <CardTitle className="flex items-center">
                 <span className="text-xl">Order Summary</span>
-                <span className="ml-auto text-sm font-normal text-muted-foreground">Order #{orderDetails.orderId}</span>
+                <span className="ml-auto text-sm font-normal text-muted-foreground">Order #{orderDetails.id}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6">

@@ -138,7 +138,7 @@ const Navbar = () => {
             ) : (
               // Customer Navigation
               <>
-                <Link to="/search" className="text-gray-700 dark:text-gray-200 hover:text-primary-500 font-medium transition-colors relative group py-2">
+                <Link to="/catalog" className="text-gray-700 dark:text-gray-200 hover:text-primary-500 font-medium transition-colors relative group py-2">
                   Browse Cars
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 transform scale-x-0 transition-transform origin-left group-hover:scale-x-100"></span>
                 </Link>

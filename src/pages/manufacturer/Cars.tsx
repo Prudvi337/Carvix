@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
@@ -6,49 +5,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Car, Plus, Search, Edit, Trash2, Eye } from "lucide-react";
+import { Car as CarIcon, Plus, Search, Edit, Trash2, Eye, Loader2 } from "lucide-react";
+import { carDataService, CarModel } from "@/services/carData";
+import { authService } from "@/services/auth";
+import { useToast } from "@/hooks/use-toast";
 
 const ManufacturerCars = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
-  const [cars, setCars] = useState([
-    {
-      id: "1",
-      name: "Tesla Model S",
-      category: "Luxury Sedan",
-      price: 85000,
-      status: "active",
-      orders: 15,
-      image: "/placeholder.svg"
-    },
-    {
-      id: "2", 
-      name: "BMW i4",
-      category: "Electric Sedan",
-      price: 65000,
-      status: "active",
-      orders: 8,
-      image: "/placeholder.svg"
-    },
-    {
-      id: "3",
-      name: "Audi e-tron",
-      category: "Electric SUV", 
-      price: 75000,
-      status: "active",
-      orders: 12,
-      image: "/placeholder.svg"
-    },
-    {
-      id: "4",
-      name: "Mercedes EQS",
-      category: "Luxury Electric",
-      price: 95000,
-      status: "draft",
-      orders: 0,
-      image: "/placeholder.svg"
-    }
-  ]);
+  const [cars, setCars] = useState<CarModel[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  authService.restoreProfileFromLocalStorage();
 
   useEffect(() => {
     // Check if user is a manufacturer
@@ -57,7 +26,31 @@ const ManufacturerCars = () => {
       navigate("/");
       return;
     }
+
+    loadCars();
   }, [navigate]);
+
+  const loadCars = async () => {
+    try {
+      setIsLoading(true);
+      const user = authService.getCurrentUser();
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      const manufacturerCars = await carDataService.getCarsByManufacturer(user.uid);
+      setCars(manufacturerCars);
+    } catch (error) {
+      console.error('Error loading cars:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to load cars. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const filteredCars = cars.filter(car => 
     car.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -73,9 +66,39 @@ const ManufacturerCars = () => {
     }
   };
 
-  const handleDeleteCar = (carId: string) => {
-    setCars(cars.filter(car => car.id !== carId));
+  const handleDeleteCar = async (carId: string) => {
+    try {
+      await carDataService.deleteCar(carId);
+      setCars(cars.filter(car => car.id !== carId));
+      toast({
+        title: "Car Deleted",
+        description: "Car has been successfully deleted.",
+      });
+    } catch (error) {
+      console.error('Error deleting car:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete car. Please try again.",
+      });
+    }
   };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary-500" />
+              <h2 className="text-xl font-semibold mb-2">Loading Cars</h2>
+              <p className="text-muted-foreground">Please wait while we load your car inventory...</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -117,7 +140,7 @@ const ManufacturerCars = () => {
             <Card key={car.id} className="overflow-hidden">
               <div className="aspect-video bg-gray-100 relative">
                 <img 
-                  src={car.image} 
+                  src={car.images[0] || "/placeholder.svg"} 
                   alt={car.name}
                   className="w-full h-full object-cover"
                 />
@@ -128,49 +151,50 @@ const ManufacturerCars = () => {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <span>{car.name}</span>
-                  <Car className="h-5 w-5 text-muted-foreground" />
+                  <CarIcon className="h-5 w-5 text-muted-foreground" />
                 </CardTitle>
                 <CardDescription>{car.category}</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Price:</span>
-                    <span className="font-bold">${car.price.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-gray-600">Total Orders:</span>
-                    <span className="font-medium">{car.orders}</span>
-                  </div>
-                  
-                  <div className="flex gap-2 pt-4">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="flex-1"
-                      onClick={() => navigate(`/manufacturer/cars/${car.id}`)}
-                    >
-                      <Eye className="h-4 w-4 mr-1" />
-                      View
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="flex-1"
-                      onClick={() => navigate(`/manufacturer/cars/${car.id}/edit`)}
-                    >
-                      <Edit className="h-4 w-4 mr-1" />
-                      Edit
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleDeleteCar(car.id)}
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+              <CardContent className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Base Price:</span>
+                  <span className="font-medium">${car.basePrice.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Fuel Type:</span>
+                  <span className="font-medium">{car.specifications.fuelType}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Engine:</span>
+                  <span className="font-medium">{car.specifications.engine}</span>
+                </div>
+                <div className="flex gap-2 pt-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => navigate(`/manufacturer/cars/${car.id}`)}
+                  >
+                    <Eye className="h-4 w-4 mr-1" />
+                    View
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => navigate(`/manufacturer/cars/${car.id}/edit`)}
+                  >
+                    <Edit className="h-4 w-4 mr-1" />
+                    Edit
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleDeleteCar(car.id)}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -180,7 +204,7 @@ const ManufacturerCars = () => {
         {filteredCars.length === 0 && (
           <Card className="text-center py-12">
             <CardContent>
-              <Car className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <CarIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-medium mb-2">No cars found</h3>
               <p className="text-muted-foreground mb-4">
                 {searchQuery ? "Try adjusting your search criteria" : "Start by adding your first car model"}

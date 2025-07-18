@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,45 +7,29 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
-import { Search, Filter, SlidersHorizontal, ChevronRight, X } from "lucide-react";
+import { Search, Filter, SlidersHorizontal, ChevronRight, X, Loader2 } from "lucide-react";
+import { carDataService, CarModel } from "@/services/carData";
 
-// Mock data for cars
-const carMockData = [
-  { id: 1, name: "Audi A4", brand: "Audi", price: 39000, image: "https://placehold.co/300x200/FFFFFF/333333?text=Audi+A4", bodyType: "Sedan", fuelType: "Gasoline" },
-  { id: 2, name: "BMW 3 Series", brand: "BMW", price: 41000, image: "https://placehold.co/300x200/FFFFFF/333333?text=BMW+3+Series", bodyType: "Sedan", fuelType: "Hybrid" },
-  { id: 3, name: "Mercedes C-Class", brand: "Mercedes", price: 42000, image: "https://placehold.co/300x200/FFFFFF/333333?text=Mercedes+C-Class", bodyType: "Sedan", fuelType: "Diesel" },
-  { id: 4, name: "Tesla Model 3", brand: "Tesla", price: 45000, image: "https://placehold.co/300x200/FFFFFF/333333?text=Tesla+Model+3", bodyType: "Sedan", fuelType: "Electric" },
-  { id: 5, name: "Toyota RAV4", brand: "Toyota", price: 30000, image: "https://placehold.co/300x200/FFFFFF/333333?text=Toyota+RAV4", bodyType: "SUV", fuelType: "Hybrid" },
-  { id: 6, name: "Honda CR-V", brand: "Honda", price: 28000, image: "https://placehold.co/300x200/FFFFFF/333333?text=Honda+CR-V", bodyType: "SUV", fuelType: "Gasoline" },
-  { id: 7, name: "Ford Mustang", brand: "Ford", price: 38000, image: "https://placehold.co/300x200/FFFFFF/333333?text=Ford+Mustang", bodyType: "Coupe", fuelType: "Gasoline" },
-  { id: 8, name: "Volvo XC60", brand: "Volvo", price: 43000, image: "https://placehold.co/300x200/FFFFFF/333333?text=Volvo+XC60", bodyType: "SUV", fuelType: "Hybrid" },
-];
-
-// Filter options
-const brands = ["Audi", "BMW", "Mercedes", "Tesla", "Toyota", "Honda", "Ford", "Volvo"];
-const bodyTypes = ["Sedan", "SUV", "Coupe", "Hatchback", "Truck", "Van"];
-const fuelTypes = ["Gasoline", "Diesel", "Electric", "Hybrid"];
-
-const CarCard = ({ car }: { car: typeof carMockData[0] }) => (
+const CarCard = ({ car }: { car: CarModel }) => (
   <Card className="overflow-hidden border-none shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 animate-zoom-in">
     <div className="relative">
       <img 
-        src={car.image} 
+        src={car.images[0] || "/placeholder.svg"} 
         alt={car.name} 
         className="w-full h-48 object-cover"
       />
       <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm px-2 py-1 rounded text-sm font-medium text-primary-600">
-        {car.brand}
+        {car.manufacturerName}
       </div>
     </div>
     <CardContent className="p-5">
       <div className="flex justify-between items-start mb-3">
         <h3 className="text-lg font-bold text-gray-800">{car.name}</h3>
-        <p className="text-primary-600 font-semibold">${car.price.toLocaleString()}</p>
+        <p className="text-primary-600 font-semibold">${car.basePrice.toLocaleString()}</p>
       </div>
       <div className="flex justify-between text-sm text-gray-500 mb-4">
-        <span>{car.bodyType}</span>
-        <span>{car.fuelType}</span>
+        <span>{car.category}</span>
+        <span>{car.specifications.fuelType}</span>
       </div>
       <Button className="w-full bg-primary-500 hover:bg-primary-600">
         <Link to={`/customize/${car.id}`} className="flex items-center w-full justify-center">
@@ -63,31 +47,63 @@ const CatalogPage = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedBodyTypes, setSelectedBodyTypes] = useState<string[]>([]);
   const [selectedFuelTypes, setSelectedFuelTypes] = useState<string[]>([]);
+  const [cars, setCars] = useState<CarModel[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [brands, setBrands] = useState<string[]>([]);
+  const [bodyTypes, setBodyTypes] = useState<string[]>([]);
+  const [fuelTypes, setFuelTypes] = useState<string[]>([]);
+
+  // Load cars and filter options
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        const allCars = await carDataService.getAllCars();
+        console.log('Loaded cars from Firestore:', allCars);
+        setCars(allCars);
+        
+        // Extract filter options from car data
+        const uniqueBrands = [...new Set(allCars.map(car => car.manufacturerName))];
+        const uniqueBodyTypes = [...new Set(allCars.map(car => car.category))];
+        const uniqueFuelTypes = [...new Set(allCars.map(car => car.specifications.fuelType))];
+        
+        setBrands(uniqueBrands);
+        setBodyTypes(uniqueBodyTypes);
+        setFuelTypes(uniqueFuelTypes);
+      } catch (error) {
+        console.error('Error loading cars:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   // Filter cars based on selected filters
-  const filteredCars = carMockData.filter(car => {
+  const filteredCars = cars.filter(car => {
     // Search term filter
     if (searchTerm && !car.name.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
     
     // Price range filter
-    if (car.price < priceRange[0] || car.price > priceRange[1]) {
+    if (car.basePrice < priceRange[0] || car.basePrice > priceRange[1]) {
       return false;
     }
     
     // Brand filter
-    if (selectedBrands.length > 0 && !selectedBrands.includes(car.brand)) {
+    if (selectedBrands.length > 0 && !selectedBrands.includes(car.manufacturerName)) {
       return false;
     }
     
     // Body type filter
-    if (selectedBodyTypes.length > 0 && !selectedBodyTypes.includes(car.bodyType)) {
+    if (selectedBodyTypes.length > 0 && !selectedBodyTypes.includes(car.category)) {
       return false;
     }
     
     // Fuel type filter
-    if (selectedFuelTypes.length > 0 && !selectedFuelTypes.includes(car.fuelType)) {
+    if (selectedFuelTypes.length > 0 && !selectedFuelTypes.includes(car.specifications.fuelType)) {
       return false;
     }
     
@@ -125,6 +141,22 @@ const CatalogPage = () => {
     setSelectedBodyTypes([]);
     setSelectedFuelTypes([]);
   };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary-500" />
+              <h2 className="text-xl font-semibold mb-2">Loading Catalog</h2>
+              <p className="text-muted-foreground">Please wait while we load the car catalog...</p>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
