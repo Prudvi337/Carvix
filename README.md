@@ -152,18 +152,6 @@ carvix/
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Three.js](https://threejs.org/) - 3D Graphics Library
-- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) - React renderer for Three.js
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [Firebase](https://firebase.google.com/) - Backend and Authentication
-- [Vercel](https://vercel.com/) - Deployment Platform
-
 ---
 
 
@@ -216,6 +204,14 @@ const firebaseConfig = {
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
+## 🙏 Acknowledgments
+
+- [Three.js](https://threejs.org/) - 3D Graphics Library
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) - React renderer for Three.js
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Firebase](https://firebase.google.com/) - Backend and Authentication
+- [Vercel](https://vercel.com/) - Deployment Platform
+
 
 <div align="center">
   <sub>Built with ❤️ by <a href="https://github.com/Prudvi337">Prudvi Kumar Reddy</a></sub>
