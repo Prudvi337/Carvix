@@ -166,10 +166,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<div align="center">
-  Made with ❤️ by <a href="https://github.com/Prudvi337">Prudvi337</a>
-</div>
-- **User Preference Learning**: Adapts to individual user style preferences
 
 ## 🔐 Environment Setup
 
