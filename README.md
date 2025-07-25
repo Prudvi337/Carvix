@@ -1,148 +1,181 @@
-# 🚗 Carvix – AI-Driven 3D & AR Vehicle Customization Platform
+# 🚗 Carvix – Next-Gen AI-Driven Vehicle Customization Platform
+
+<div align="center">
+
+[![Made with React](https://img.shields.io/badge/Made_with-React-61DAFB.svg?logo=react&logoColor=white)](https://reactjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Three.js](https://img.shields.io/badge/Three.js-000000.svg?logo=three.js&logoColor=white)](https://threejs.org)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28.svg?logo=firebase&logoColor=black)](https://firebase.google.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > **Personalize. Visualize. Revolutionize.**  
-> An immersive platform where design meets intelligence. Customize cars in 3D, preview in AR, and get AI-powered suggestions—all in real time.
+> Experience the future of car customization with AI-powered 3D visualization and AR technology.
 
-![Carvix Banner](https://images.unsplash.com/photo-1739613563958-9b8751121726?auto=format&fit=crop&w=1350&q=80)
+[Live Demo](https://carvixapp.vercel.app) · [Report Bug](https://github.com/Prudvi337/Carvix/issues) · [Request Feature](https://github.com/Prudvi337/Carvix/issues)
 
----
+![Carvix Banner](public/images/car.jpg)
 
-## ✨ Features
+</div>
 
-### 🔧 **Real-Time 3D Car Customization** ✅ IMPLEMENTED
-- **Universal 3D Model Support**: Works with any 3D model regardless of element naming conventions
-- **AI-Powered Material Detection**: Automatically detects paintable surfaces using intelligent pattern matching
-- **Real-Time Color Application**: Dynamic color changes with preserved textures and materials
-- **Advanced Wheel & Interior Customization**: Smart detection and customization of wheels and interior elements
-- **Interactive 3D Controls**: Rotate, zoom, and explore with smooth animations
+## 🌟 Key Features
 
-### 🌐 **Web AR Visualization** ✅ IMPLEMENTED
-- **Cross-Platform AR**: Works on compatible smartphones and tablets via WebXR
-- **Real-World Placement**: View your custom car in your actual environment
-- **Interactive AR Controls**: Scale, rotate, and position your car in AR space
-- **Screenshot & Sharing**: Capture and share your AR experience
+<details>
+<summary>🎨 Real-Time 3D Customization</summary>
 
-### 🤖 **AI Design Assistant** ✅ IMPLEMENTED
-- **Intelligent Recommendations**: AI-powered suggestions based on trends and user preferences
-- **Performance-Aware Suggestions**: Wheel recommendations considering aerodynamics and performance
-- **Color Harmony Analysis**: Smart interior suggestions based on exterior color choices
-- **Trending Analysis**: Real-time color and style recommendations
-- **Confidence Scoring**: Each suggestion comes with AI confidence levels
-- **One-Click Application**: Apply AI suggestions instantly to your build
+- **Universal 3D Model Support**: Seamlessly works with any 3D car model
+- **AI-Powered Material Detection**: Smart surface detection for perfect customization
+- **Dynamic Color Application**: Real-time color changes with texture preservation
+- **Smart Component Recognition**: Automatic detection of wheels, interior, and body parts
+- **Interactive Controls**: Smooth 360° rotation, zoom, and pan controls
+</details>
 
-### 🔐 **Real Authentication & Cloud Storage** ✅ IMPLEMENTED
-- **Firebase Authentication**: Secure Google and GitHub OAuth integration
-- **Cloud-Based Build Storage**: Save builds securely to Firebase Firestore
-- **Cross-Device Access**: Access your designs from any device
-- **User Profiles**: Personalized preferences and build history
-- **Manufacturer Portal**: Separate authentication for car manufacturers
+<details>
+<summary>🤖 AI Design Assistant</summary>
 
-### 🏭 **Production-Ready Manufacturing Pipeline** ✅ IMPLEMENTED
-- **Manufacturing Specifications Export**: Generate production-ready JSON specifications
-- **Paint Code Generation**: Automatic paint code generation for manufacturing
-- **Material Lists**: Detailed material specifications for production
-- **Quality Control Guidelines**: Comprehensive QC checkpoints and testing requirements
-- **Cost Breakdown**: Detailed manufacturing cost analysis
-- **Export Formats**: Downloadable specifications for manufacturing systems
+- **Smart Recommendations**: AI-powered design suggestions based on global trends
+- **Color Harmony**: Intelligent color combinations for exterior and interior
+- **Performance Analysis**: Smart suggestions considering aerodynamics and style
+- **Personalized Experience**: Learning from user preferences and choices
+</details>
 
-### 🎨 **Advanced Customization Features** ✅ IMPLEMENTED
-- **Real-Time Price Calculation**: Dynamic pricing updates as you customize
-- **Package Management**: Comprehensive feature packages with detailed breakdowns
-- **Build Sharing**: Public sharing with customizable descriptions and tags
-- **Build History**: Complete history of all your custom builds
-- **Favorites System**: Save and manage your favorite configurations
+<details>
+<summary>📱 AR Visualization</summary>
+
+- **Instant AR Preview**: View your custom car in your environment
+- **Cross-Platform**: Works on iOS and Android devices
+- **Real-World Scaling**: Accurate size representation in AR
+- **Interactive Placement**: Position and rotate your car in real space
+</details>
+
+
 
 ---
 
 ## 🚀 Live Demo
 
-🌍 [**Try It Live**](https://carvix.vercel.app)  
+🌍 [**Try It Live**](https://carvixapp.vercel.app)  
 🎥 [**Project Walkthrough**](https://your-video-link.com)
 
 ---
 
-## 🛠 Tech Stack
+## 🛠️ Technology Stack
 
-| Layer        | Technologies |
-|--------------|--------------|
-| **Frontend** | React.js, TypeScript, Tailwind CSS, Three.js, WebXR |
-| **3D Graphics** | Three.js, React Three Fiber, Drei |
-| **AI/ML** | Custom AI Engine, Pattern Recognition, Trend Analysis |
-| **Backend**  | Firebase (Authentication, Firestore, Storage) |
-| **Authentication** | Firebase Auth, Google OAuth, GitHub OAuth |
-| **Cloud Storage** | Firebase Firestore, Real-time synchronization |
-| **Deployment** | Vercel (Frontend), Firebase (Backend) |
-| **DevOps**   | GitHub Actions, CI/CD Pipelines |
+<table>
+  <tr>
+    <td>
+      <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" width="40" title="React">
+      <br>React
+    </td>
+    <td>
+      <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" width="40" title="TypeScript">
+      <br>TypeScript
+    </td>
+    <td>
+      <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/threejs/threejs-original.svg" width="40" title="Three.js">
+      <br>Three.js
+    </td>
+    <td>
+      <img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" width="40" title="Tailwind CSS">
+      <br>Tailwind
+    </td>
+    <td>
+      <img src="https://www.vectorlogo.zone/logos/firebase/firebase-icon.svg" width="40" title="Firebase">
+      <br>Firebase
+    </td>
+  </tr>
+</table>
+
+### Core Technologies
+- **Frontend**: React 18 with TypeScript and Tailwind CSS
+- **3D Engine**: Three.js with React Three Fiber & Drei
+- **State Management**: React Query & Context API
+- **UI Components**: Radix UI & Shadcn
+- **Authentication**: Firebase Auth with Google & GitHub OAuth
+- **Database**: Firebase Firestore
+- **Deployment**: Vercel with Edge Functions
 
 ---
 
-## 📸 Screenshots
+## 📸 Experience Carvix
 
-| 3D Car Customizer | AI Design Assistant | AR Preview |
-|-------------------|-------------------|------------|
-| ![3D View](https://images.unsplash.com/photo-1739613562425-c10d7bfc2352?auto=format&fit=crop&w=600&q=80) | ![AI Suggestions](https://images.unsplash.com/photo-1581091871235-868c13b39a42?auto=format&fit=crop&w=600&q=80) | ![AR Preview](https://plus.unsplash.com/premium_photo-1733317438378-1d6a0b8e65e7?auto=format&fit=crop&w=600&q=80) |
+<div align="center">
+  <img src="public/images/car1.jpg" alt="3D Customizer" width="280"/>
+  <img src="public/images/car2.jpg" alt="AR Preview" width="280"/>
+</div>
+
+### ✨ What Makes Carvix Special?
+
+- 🎯 **Precision Engineering**: Advanced 3D rendering with real-time material updates
+- 🤖 **AI-Powered**: Smart suggestions that learn from global trends and user preferences
+- 📱 **Cross-Platform**: Seamless experience across desktop and mobile devices
+- ⚡ **Real-Time**: Instant updates and smooth transitions
+- 🔒 **Secure**: Enterprise-grade security with Firebase authentication
 
 ---
 
-## 🧠 AI Integration
+## 🚀 Getting Started
 
-Carvix's AI module provides:
+```bash
+# Clone the repository
+git clone https://github.com/Prudvi337/Carvix.git
 
-### **Smart Material Detection** ✅
-- **Universal 3D Model Support**: Works with any 3D model regardless of naming conventions
-- **Intelligent Pattern Matching**: Detects car body materials using AI algorithms
-- **Geometry Analysis**: Analyzes mesh characteristics to identify paintable surfaces
-- **Fallback Mechanisms**: Intelligent fallbacks when specific materials aren't found
+# Navigate to the project
+cd Carvix
 
-### **Design Recommendations** ✅
-- **Trending Color Analysis**: Real-time color popularity and trend analysis
-- **Performance Optimization**: Wheel and package suggestions based on performance metrics
-- **Color Harmony**: Interior suggestions based on exterior color psychology
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+## 📦 Project Structure
+
+```
+carvix/
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── pages/         # Page components
+│   ├── services/      # API and service integrations
+│   ├── context/       # React Context providers
+│   ├── hooks/         # Custom React hooks
+│   └── lib/          # Utility functions
+├── public/           # Static assets
+└── package.json     # Project dependencies
+```
+
+## 🤝 Contributing
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Three.js](https://threejs.org/) - 3D Graphics Library
+- [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) - React renderer for Three.js
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Firebase](https://firebase.google.com/) - Backend and Authentication
+- [Vercel](https://vercel.com/) - Deployment Platform
+
+---
+
+<div align="center">
+  Made with ❤️ by <a href="https://github.com/Prudvi337">Prudvi337</a>
+</div>
 - **User Preference Learning**: Adapts to individual user style preferences
 
-### **Confidence Scoring** ✅
-- **Multi-Factor Analysis**: Combines trends, preferences, and performance data
-- **Real-Time Scoring**: Dynamic confidence levels for each recommendation
-- **Explainable AI**: Clear reasoning for each suggestion provided
+## 🔐 Environment Setup
 
----
-
-## 🔧 Universal 3D Model Solution
-
-### **The Problem Solved** ✅
-Traditional 3D customization systems fail when users upload different 3D models because:
-- Material names vary between models (e.g., "CarBody" vs "Vehicle_Exterior")
-- Element hierarchies differ across modeling software
-- No standardized naming conventions exist
-
-### **Our AI-Powered Solution** ✅
-- **Pattern Recognition**: AI detects car body materials using naming patterns and geometry analysis
-- **Intelligent Fallbacks**: When specific materials aren't found, AI identifies the largest mesh as the car body
-- **Universal Compatibility**: Works with models from Blender, Maya, 3ds Max, or any 3D software
-- **Real-Time Adaptation**: Automatically adapts to any 3D model structure
-
----
-
-## 💻 Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/Prudvi337/carvix.git
-cd carvix
-```
-
-### 2. Install dependencies
-
-```bash
-npm install
-```
-
-### 3. Set up Firebase
-
-Create a Firebase project and add your configuration to `src/services/auth.ts`:
-
+1. **Firebase Configuration**
 ```typescript
+// Add to src/services/auth.ts
 const firebaseConfig = {
   apiKey: "your-api-key",
   authDomain: "your-project.firebaseapp.com",
@@ -153,94 +186,41 @@ const firebaseConfig = {
 };
 ```
 
-### 4. Run the application
-
-```bash
-npm run dev 
-```
-
-### 5. Open in browser
-
-```
-http://localhost:3000
-```
+2. **Authentication Setup**
+- Enable Google & GitHub Authentication in Firebase Console
+- Configure OAuth consent screen
+- Add authorized domains
+- Set up callback URLs
 
 ---
 
-## 🔐 Authentication Setup
+## 🎯 Future Roadmap
 
-### Google OAuth
-1. Enable Google Authentication in Firebase Console
-2. Add authorized domains
-3. Configure OAuth consent screen
-
-### GitHub OAuth
-1. Create GitHub OAuth App
-2. Add client ID and secret to Firebase
-3. Configure callback URLs
-
----
-
-## 🏭 Manufacturing Integration
-
-### Export Manufacturing Specifications
-1. Customize your vehicle
-2. Click "Export" button
-3. Download production-ready JSON specifications
-4. Import into manufacturing systems
-
-### Specifications Include:
-- **Paint Codes**: Standardized paint codes for production
-- **Material Lists**: Complete material specifications
-- **Quality Control**: QC checkpoints and testing requirements
-- **Cost Analysis**: Detailed manufacturing cost breakdown
-
----
-
-## 🤝 Contributing
-
-Want to make Carvix even better? Contributions are welcome!
-
-```bash
-# Fork it
-git checkout -b feature/YourFeature
-git commit -m "Add: Your Feature"
-git push origin feature/YourFeature
-```
-
-### Development Guidelines
-- Follow TypeScript best practices
-- Use the existing component library
-- Test AI features thoroughly
-- Ensure 3D model compatibility
-
----
-
-## 📜 License
-
-Licensed under [MIT License](./LICENSE)
-
----
-
-## 📬 Connect With Me
-
-**Prudvi Kumar Reddy. P**
-📫 Email: [prudvireddy7733@gmail.com](mailto:prudvireddy7733@gmail.com)
-🌐 Portfolio: [prudvi-kumar-reddy.vercel.app](https://prudvi-kumar-reddy.vercel.app)
-🐙 GitHub: [@Prudvi337](https://github.com/Prudvi337)
-💼 LinkedIn: [@prudvi-kumar-reddy](https://www.linkedin.com/in/prudvi-kumar-reddy-5679662a5)
-
----
-
-## 🎯 Roadmap
-
-### Phase 2 Features (Coming Soon)
 - **Advanced AI**: Machine learning for personalized recommendations
 - **VR Support**: Full virtual reality customization experience
-- **Collaborative Design**: Real-time collaborative car customization
-- **Advanced Analytics**: Detailed user behavior and preference analytics
-- **Mobile App**: Native iOS and Android applications
+- **Mobile Apps**: Native iOS and Android applications
+- **Collaborative Design**: Real-time collaborative customization
+- **Advanced Analytics**: User behavior and preference tracking
+
+## 📬 Contact & Support
+
+<div align="center">
+
+**Prudvi Kumar Reddy. P**
+
+[![Portfolio](https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=About.me&logoColor=white)](https://prudvi-kumar-reddy.vercel.app)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Prudvi337)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/prudvi-kumar-reddy-5679662a5)
+[![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:prudvireddy7733@gmail.com)
+
+</div>
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-> 🚘 **Carvix** is making personalized vehicle design accessible, intelligent, and sustainable — delivering a premium user experience with modern tech and AI-powered innovation.
+<div align="center">
+  <sub>Built with ❤️ by <a href="https://github.com/Prudvi337">Prudvi Kumar Reddy</a></sub>
+</div>

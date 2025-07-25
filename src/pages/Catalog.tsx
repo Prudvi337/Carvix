@@ -52,6 +52,7 @@ const CatalogPage = () => {
   const [brands, setBrands] = useState<string[]>([]);
   const [bodyTypes, setBodyTypes] = useState<string[]>([]);
   const [fuelTypes, setFuelTypes] = useState<string[]>([]);
+  const [isMockData, setIsMockData] = useState(false);
 
   // Load cars and filter options
   useEffect(() => {
@@ -60,23 +61,146 @@ const CatalogPage = () => {
         setIsLoading(true);
         const allCars = await carDataService.getAllCars();
         console.log('Loaded cars from Firestore:', allCars);
-        setCars(allCars);
-        
-        // Extract filter options from car data
-        const uniqueBrands = [...new Set(allCars.map(car => car.manufacturerName))];
-        const uniqueBodyTypes = [...new Set(allCars.map(car => car.category))];
-        const uniqueFuelTypes = [...new Set(allCars.map(car => car.specifications.fuelType))];
-        
-        setBrands(uniqueBrands);
-        setBodyTypes(uniqueBodyTypes);
-        setFuelTypes(uniqueFuelTypes);
+        if (allCars.length === 0) {
+          // Use mock data if no cars from Firebase
+          setIsMockData(true);
+          const mockCars: CarModel[] = [
+            {
+              id: 'mock-1',
+              manufacturerId: 'mock-manu-1',
+              manufacturerName: 'MockBrand',
+              name: 'Mock 3D Car 1',
+              category: 'Sedan',
+              basePrice: 25000,
+              description: 'This is a mock car using a 3D model. (Demo)',
+              specifications: {
+                engine: 'Electric',
+                transmission: 'Automatic',
+                fuelType: 'Electric',
+                seating: '5',
+                topSpeed: '220 km/h',
+                acceleration: '6.5s',
+                range: '400 km',
+                power: '200 kW',
+              },
+              features: ['3D Model', 'Mock Data', 'Electric'],
+              images: ['/images/car.jpg'],
+              model3D: '/models/car3.glb',
+              status: 'active',
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              customizationOptions: {
+                colors: [
+                  { id: 'c1', name: 'Red', hex: '#ff0000', price: 0 },
+                  { id: 'c2', name: 'Blue', hex: '#0000ff', price: 0 },
+                ],
+                wheels: [
+                  { id: 'w1', name: 'Standard', size: '18"', style: 'Alloy', price: 0, image: '' },
+                ],
+                interiors: [
+                  { id: 'i1', name: 'Standard', material: 'Fabric', color: 'Black', price: 0, image: '' },
+                ],
+                packages: [],
+              },
+            },
+            {
+              id: 'mock-2',
+              manufacturerId: 'mock-manu-2',
+              manufacturerName: 'MockBrand',
+              name: 'Mock 3D Car 2',
+              category: 'SUV',
+              basePrice: 32000,
+              description: 'This is another mock car using a 3D model. (Demo)',
+              specifications: {
+                engine: 'Hybrid',
+                transmission: 'Automatic',
+                fuelType: 'Hybrid',
+                seating: '7',
+                topSpeed: '200 km/h',
+                acceleration: '8.2s',
+                range: '600 km',
+                power: '180 kW',
+              },
+              features: ['3D Model', 'Mock Data', 'Hybrid'],
+              images: ['/images/car1.jpg'],
+              model3D: '/models/car3.glb',
+              status: 'active',
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              customizationOptions: {
+                colors: [
+                  { id: 'c1', name: 'White', hex: '#ffffff', price: 0 },
+                  { id: 'c2', name: 'Black', hex: '#000000', price: 0 },
+                ],
+                wheels: [
+                  { id: 'w1', name: 'Standard', size: '19"', style: 'Alloy', price: 0, image: '' },
+                ],
+                interiors: [
+                  { id: 'i1', name: 'Premium', material: 'Leather', color: 'Beige', price: 0, image: '' },
+                ],
+                packages: [],
+              },
+            },
+            {
+              id: 'mock-3',
+              manufacturerId: 'mock-manu-3',
+              manufacturerName: 'MockBrand',
+              name: 'Mock 3D Car 3',
+              category: 'Coupe',
+              basePrice: 28000,
+              description: 'This is a third mock car using a 3D model. (Demo)',
+              specifications: {
+                engine: 'Petrol',
+                transmission: 'Manual',
+                fuelType: 'Petrol',
+                seating: '4',
+                topSpeed: '240 km/h',
+                acceleration: '5.9s',
+                range: '500 km',
+                power: '220 kW',
+              },
+              features: ['3D Model', 'Mock Data', 'Petrol'],
+              images: ['/images/car2.jpg'],
+              model3D: '/models/car3.glb',
+              status: 'active',
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              customizationOptions: {
+                colors: [
+                  { id: 'c1', name: 'Yellow', hex: '#ffff00', price: 0 },
+                  { id: 'c2', name: 'Gray', hex: '#888888', price: 0 },
+                ],
+                wheels: [
+                  { id: 'w1', name: 'Sport', size: '20"', style: 'Alloy', price: 0, image: '' },
+                ],
+                interiors: [
+                  { id: 'i1', name: 'Sport', material: 'Alcantara', color: 'Black', price: 0, image: '' },
+                ],
+                packages: [],
+              },
+            },
+          ];
+          setCars(mockCars);
+          setBrands(['MockBrand']);
+          setBodyTypes(['Sedan', 'SUV', 'Coupe']);
+          setFuelTypes(['Electric', 'Hybrid', 'Petrol']);
+          localStorage.setItem('mockCars', JSON.stringify(mockCars));
+        } else {
+          setCars(allCars);
+          // Extract filter options from car data
+          const uniqueBrands = [...new Set(allCars.map(car => car.manufacturerName))];
+          const uniqueBodyTypes = [...new Set(allCars.map(car => car.category))];
+          const uniqueFuelTypes = [...new Set(allCars.map(car => car.specifications.fuelType))];
+          setBrands(uniqueBrands);
+          setBodyTypes(uniqueBodyTypes);
+          setFuelTypes(uniqueFuelTypes);
+        }
       } catch (error) {
         console.error('Error loading cars:', error);
       } finally {
         setIsLoading(false);
       }
     };
-
     loadData();
   }, []);
 
@@ -167,6 +291,11 @@ const CatalogPage = () => {
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Browse our extensive collection of vehicles and find the perfect match for your needs
             </p>
+            {isMockData && (
+              <div className="mt-4 p-3 bg-yellow-100 text-yellow-800 rounded shadow text-base font-semibold">
+                Showing <span className="font-bold">mock data</span> (no cars found in database). 3D models are for demo purposes only.
+              </div>
+            )}
           </div>
           
           <div className="flex flex-col md:flex-row gap-8">

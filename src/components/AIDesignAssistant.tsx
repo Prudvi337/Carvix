@@ -31,6 +31,7 @@ interface AISuggestion {
 interface AIDesignAssistantProps {
   currentSelections: {
     color?: { hex: string; name: string };
+    customColor?: string; // Add custom color support
     wheel?: { id: string; name: string };
     interior?: { id: string; name: string };
     package?: { id: string; name: string };
@@ -57,7 +58,8 @@ class AIDesignEngine {
     const suggestions: AISuggestion[] = [];
     
     // Color recommendations based on trends and user preferences
-    const colorSuggestions = this.generateColorSuggestions(currentSelections.color, userPreferences);
+    const currentColorHex = currentSelections.customColor || (currentSelections.color ? currentSelections.color.hex : null);
+    const colorSuggestions = this.generateColorSuggestions({ hex: currentColorHex }, userPreferences);
     suggestions.push(...colorSuggestions);
     
     // Wheel recommendations based on performance and aesthetics
@@ -465,4 +467,4 @@ const AIDesignAssistant = ({ currentSelections, onApplySuggestion, userPreferenc
   );
 };
 
-export default AIDesignAssistant; 
+export default AIDesignAssistant;

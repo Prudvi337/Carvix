@@ -44,7 +44,11 @@ const Hero = () => {
             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-secondary-500 rounded-full opacity-10 blur-3xl animate-pulse [animation-delay:2s]"></div>
             
             <div className="relative bg-black/30 backdrop-blur-lg rounded-3xl p-8 border border-white/10 shadow-xl animate-glow">
-              <CarModel3D className="h-[400px]" />
+              <CarModel3D 
+                className="h-[400px]" 
+                selectedColor={null}
+                customColor={null}
+              />
               <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 bg-gradient-to-r from-primary-500 to-secondary-500 shadow-lg rounded-xl px-6 py-3 text-white">
                 <p className="font-semibold flex items-center">
                   <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>

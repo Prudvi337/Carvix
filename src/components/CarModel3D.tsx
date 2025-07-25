@@ -13,6 +13,7 @@ declare global {
 interface CarModel3DProps {
   className?: string;
   selectedColor?: { hex: string };
+  customColor?: string; // New prop for custom color
   selectedWheel?: { id: string };
   selectedInterior?: { id: string };
   modelPath?: string;
@@ -167,12 +168,16 @@ class AIMaterialDetector {
   }
 }
 
-function Model({ selectedColor, selectedWheel, selectedInterior, modelPath = "/models/car3.glb", onMaterialDetected }: Omit<CarModel3DProps, 'className'>) {
+function Model({ selectedColor, customColor, selectedWheel, selectedInterior, modelPath = "/models/car3.glb", onMaterialDetected }: Omit<CarModel3DProps, 'className'>) {
   const [modelLoaded, setModelLoaded] = useState(false);
   const [detectedMaterials, setDetectedMaterials] = useState<string[]>([]);
   const modelRef = useRef<THREE.Object3D>(null);
   const [isRotating, setIsRotating] = useState(true);
   const aiDetector = useMemo(() => AIMaterialDetector.getInstance(), []);
+  
+  // Add color transition effect state
+  const [currentColorObj, setCurrentColorObj] = useState<THREE.Color>(new THREE.Color(selectedColor?.hex || '#ffffff'));
+  const [targetColorObj, setTargetColorObj] = useState<THREE.Color>(new THREE.Color());
   
   const { scene, nodes, materials } = useGLTF(modelPath, true, true, (loader) => {
     console.log('Loading model...', loader);
@@ -191,7 +196,20 @@ function Model({ selectedColor, selectedWheel, selectedInterior, modelPath = "/m
 
   // Universal color application that works with any material naming
   useEffect(() => {
-    if (scene && selectedColor && detectedMaterials.length > 0) {
+    if (scene && detectedMaterials.length > 0) {
+      // Determine which color to use - custom color takes precedence
+      const colorToApply = customColor || (selectedColor ? selectedColor.hex : null);
+      
+      // If no color is selected (initial state), don't change material colors
+      if (!colorToApply) {
+        // Reset to original materials if needed, or just do nothing
+        // For now, we do nothing to keep the original model colors
+        return;
+      }
+      
+      const newColor = new THREE.Color(colorToApply);
+      setTargetColorObj(newColor);
+
       scene.traverse((child) => {
         if (child instanceof THREE.Mesh && child.material) {
           // Handle both single material and material arrays
@@ -202,15 +220,8 @@ function Model({ selectedColor, selectedWheel, selectedInterior, modelPath = "/m
             const materialName = (material as any).name || '';
             if (detectedMaterials.includes(materialName)) {
               // Create new material to avoid affecting other instances
-              const newMaterial = new THREE.MeshStandardMaterial({
-                color: new THREE.Color(selectedColor.hex),
-                metalness: 0.6,
-                roughness: 0.2,
-                map: (material as any).map, // Preserve existing textures
-                normalMap: (material as any).normalMap,
-                roughnessMap: (material as any).roughnessMap,
-                metalnessMap: (material as any).metalnessMap,
-              });
+              const newMaterial = (material as THREE.MeshStandardMaterial).clone();
+              newMaterial.color = newColor;
               
               if (Array.isArray(child.material)) {
                 child.material[index] = newMaterial;
@@ -223,7 +234,15 @@ function Model({ selectedColor, selectedWheel, selectedInterior, modelPath = "/m
         }
       });
     }
-  }, [scene, selectedColor, detectedMaterials]);
+  }, [scene, selectedColor, customColor, detectedMaterials]);
+
+  // Update target color when selection changes
+  useEffect(() => {
+    const colorToApply = customColor || (selectedColor ? selectedColor.hex : null);
+    if (colorToApply) {
+      setTargetColorObj(new THREE.Color(colorToApply));
+    }
+  }, [customColor, selectedColor]);
 
   // Enhanced wheel customization
   useEffect(() => {
@@ -339,11 +358,31 @@ function Model({ selectedColor, selectedWheel, selectedInterior, modelPath = "/m
     mesh.material = interiorMaterial;
   };
 
-  // Auto-rotation animation
+  // Auto-rotation animation and color transition
   useFrame((state, delta) => {
-    if (modelRef.current && isRotating) {
-      // Rotate the model around the Y axis
-      modelRef.current.rotation.y += delta * 0.5; 
+    if (modelRef.current) {
+      // Rotate the model around the Y axis if rotation is enabled
+      if (isRotating) {
+        modelRef.current.rotation.y += delta * 0.5;
+      }
+      
+      // Smooth color transition
+      currentColorObj.r += (targetColorObj.r - currentColorObj.r) * 0.1;
+      currentColorObj.g += (targetColorObj.g - currentColorObj.g) * 0.1;
+      currentColorObj.b += (targetColorObj.b - currentColorObj.b) * 0.1;
+      
+      // Apply the transitioning color
+      scene.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material) {
+          const materials = Array.isArray(child.material) ? child.material : [child.material];
+          materials.forEach((material) => {
+            const materialName = (material as any).name || '';
+            if (detectedMaterials.includes(materialName) && (material as any).color) {
+              (material as any).color.copy(currentColorObj);
+            }
+          });
+        }
+      });
     }
   });
 
@@ -417,7 +456,7 @@ function EnhancedLighting() {
   );
 }
 
-const CarModel3D = ({ className = "", selectedColor, selectedWheel, selectedInterior, modelPath, onMaterialDetected }: CarModel3DProps) => {
+const CarModel3D = ({ className = "", selectedColor, customColor, selectedWheel, selectedInterior, modelPath, onMaterialDetected }: CarModel3DProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -447,7 +486,7 @@ const CarModel3D = ({ className = "", selectedColor, selectedWheel, selectedInte
       
       <div className={`w-full h-full transition-opacity duration-500 car-model-container ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
         <Canvas
-          camera={{ position: [3, 3, 3], fov: 75 }}
+          camera={{ position: [8, 4, 8], fov: 50 }}
           style={{ width: '100%', height: '100%' }}
           gl={{ 
             antialias: true,
@@ -458,6 +497,7 @@ const CarModel3D = ({ className = "", selectedColor, selectedWheel, selectedInte
             <EnhancedLighting />
             <Model 
               selectedColor={selectedColor}
+              customColor={customColor}
               selectedWheel={selectedWheel}
               selectedInterior={selectedInterior}
               modelPath={modelPath}

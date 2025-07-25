@@ -5,8 +5,9 @@ import CarModel3D from "@/components/CarModel3D";
 import AIDesignAssistant from "@/components/AIDesignAssistant";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { HexColorPicker } from "react-colorful"; // You'll need to install this package
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Paintbrush, CircleCheck, Palette, Cog, Package, CreditCard, Share2, Save, Smartphone, Brain, Download, Eye, Loader2 } from "lucide-react";
+import { Paintbrush, CircleCheck, Palette, Cog, Package, CreditCard, Share2, Save, Smartphone, Brain, Download, Eye, Loader2, Plus, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { authService } from "@/services/auth";
 import { cloudStorage, CarBuild } from "@/services/cloudStorage";
@@ -20,14 +21,18 @@ const CustomizeCar = () => {
   // State for car data and customization options
   const [carData, setCarData] = useState<CarModel | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // Add missing state variables for custom color functionality
   const [selectedColor, setSelectedColor] = useState<CarColor | null>(null);
+  const [customColor, setCustomColor] = useState<string | null>(null);
+  const [showColorPicker, setShowColorPicker] = useState(false);
   const [selectedWheel, setSelectedWheel] = useState<CarWheel | null>(null);
   const [selectedInterior, setSelectedInterior] = useState<CarInterior | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<CarPackage | null>(null);
   const [detectedMaterials, setDetectedMaterials] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const [showAIAssistant, setShowAIAssistant] = useState(true);
-
+  // Add missing state variables for custom color functionality
+  
   // Load car data on component mount
   useEffect(() => {
     const loadCarData = async () => {
@@ -43,8 +48,33 @@ const CustomizeCar = () => {
 
       try {
         setIsLoading(true);
+        // Try to get mock car from localStorage first
+        const mockCarsRaw = localStorage.getItem('mockCars');
+        let mockCar = null;
+        if (mockCarsRaw) {
+          const mockCars = JSON.parse(mockCarsRaw);
+          mockCar = mockCars.find((c: any) => c.id === carId);
+        }
+        if (mockCar) {
+          setCarData(mockCar);
+          // Set default selections
+          if (mockCar.customizationOptions.colors.length > 0) {
+            setSelectedColor(mockCar.customizationOptions.colors[0]);
+          }
+          if (mockCar.customizationOptions.wheels.length > 0) {
+            setSelectedWheel(mockCar.customizationOptions.wheels[0]);
+          }
+          if (mockCar.customizationOptions.interiors.length > 0) {
+            setSelectedInterior(mockCar.customizationOptions.interiors[0]);
+          }
+          if (mockCar.customizationOptions.packages.length > 0) {
+            setSelectedPackage(mockCar.customizationOptions.packages[0]);
+          }
+          setIsLoading(false);
+          return;
+        }
+        // Otherwise, fetch from Firebase
         const car = await carDataService.getCarById(carId);
-        
         if (!car) {
           toast({
             title: "Car Not Found",
@@ -54,9 +84,7 @@ const CustomizeCar = () => {
           navigate("/catalog");
           return;
         }
-
         setCarData(car);
-        
         // Set default selections
         if (car.customizationOptions.colors.length > 0) {
           setSelectedColor(car.customizationOptions.colors[0]);
@@ -82,7 +110,6 @@ const CustomizeCar = () => {
         setIsLoading(false);
       }
     };
-
     loadCarData();
   }, [carId, navigate, toast]);
 
@@ -442,6 +469,7 @@ const CustomizeCar = () => {
                 <CarModel3D 
                   className="h-[400px] w-full" 
                   selectedColor={selectedColor}
+                  customColor={customColor}
                   selectedWheel={selectedWheel}
                   selectedInterior={selectedInterior}
                   modelPath={carData.model3D}
@@ -503,12 +531,84 @@ const CustomizeCar = () => {
                   <TabsContent value="color">
                     <div className="space-y-4">
                       <h3 className="font-medium text-lg">Exterior Color</h3>
+                      
+                      {/* Custom Color Picker Section */}
+                      <div className="mb-6 border rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-medium text-sm">Custom Color</h4>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setShowColorPicker(!showColorPicker)}
+                            className="flex items-center gap-1"
+                          >
+                            {showColorPicker ? "Hide Picker" : "Choose Custom Color"}
+                            <Palette className="h-4 w-4 ml-1" />
+                          </Button>
+                        </div>
+                        
+                        {showColorPicker && (
+                          <div className="space-y-3">
+                            <div className="flex justify-center">
+                              <HexColorPicker 
+                                color={customColor || "#3b82f6"} 
+                                onChange={setCustomColor} 
+                                className="w-full max-w-[240px]"
+                              />
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <div 
+                                  className="w-8 h-8 rounded-full border"
+                                  style={{ backgroundColor: customColor || "#3b82f6" }}
+                                />
+                                <span className="text-sm font-medium">{customColor || "#3b82f6"}</span>
+                              </div>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => {
+                                  setSelectedColor(null);
+                                  toast({
+                                    title: "Custom Color Applied",
+                                    description: `Applied custom color ${customColor}`,
+                                    duration: 3000,
+                                  });
+                                }}
+                                className="flex items-center gap-1"
+                                disabled={!customColor}
+                              >
+                                Apply
+                                <CheckCircle className="h-4 w-4 ml-1" />
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium text-sm">Preset Colors</h4>
+                        {customColor && (
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            onClick={() => setCustomColor(null)}
+                            className="text-xs text-muted-foreground"
+                          >
+                            Reset to Presets
+                          </Button>
+                        )}
+                      </div>
+                      
                       <div className="grid grid-cols-2 gap-3">
                         {carData?.customizationOptions.colors.map((color) => (
                           <div
                             key={color.id}
                             className={`border rounded-lg p-3 cursor-pointer transition-all ${selectedColor?.id === color.id ? 'ring-2 ring-primary-500' : 'hover:border-primary-300'}`}
-                            onClick={() => setSelectedColor(color)}
+                            onClick={() => {
+                              setCustomColor(null); // Clear custom color when selecting a preset
+                              setSelectedColor(color);
+                            }}
                           >
                             <div className="flex items-center gap-2">
                               <div 
@@ -521,12 +621,28 @@ const CustomizeCar = () => {
                                   {color.price === 0 ? 'Included' : `+$${color.price.toLocaleString()}`}
                                 </p>
                               </div>
-                              {selectedColor?.id === color.id && (
+                              {selectedColor?.id === color.id && !customColor && (
                                 <CircleCheck className="h-5 w-5 text-primary-500" />
                               )}
                             </div>
                           </div>
                         ))}
+                        
+                        {/* Color Palette Button */}
+                        <div
+                          className={`border rounded-lg p-3 cursor-pointer transition-all hover:border-primary-300 flex items-center justify-center ${customColor ? 'ring-2 ring-primary-500' : ''}`}
+                          onClick={() => {
+                            setShowColorPicker(true);
+                            setSelectedColor(null); // Deselect preset color when opening custom picker
+                          }}
+                        >
+                          <div className="flex flex-col items-center gap-1">
+                            <div className="w-8 h-8 rounded-full border flex items-center justify-center bg-gradient-to-r from-red-500 via-green-500 to-blue-500">
+                              <Plus className="h-4 w-4 text-white" />
+                            </div>
+                            <p className="font-medium text-sm">Custom Color</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </TabsContent>
