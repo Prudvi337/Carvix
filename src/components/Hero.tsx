@@ -3,11 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import CarModel3D from "./CarModel3D";
 import { ChevronRight } from "lucide-react";
+import { useState } from "react";
+import ModelLoader from "./ModelLoader";
 
 const Hero = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
-    <section className="min-h-[85vh] flex items-center relative overflow-hidden bg-gradient-to-b from-gray-900 to-gray-800">
-      <div 
+    <>
+      {isLoading && <ModelLoader onLoadingComplete={() => setIsLoading(false)} />}
+      <section className="min-h-[85vh] flex items-center relative overflow-hidden bg-gradient-to-b from-gray-900 to-gray-800">
+        <div 
         className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMDIwMjAiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIgMS44LTQgNC00czQgMS44IDQgNC0xLjggNC00IDQtNC0xLjgtNC00TTE2IDM0YzAtMi4yIDEuOC00IDQtNHM0IDEuOCA0IDQtMS44IDQtNCA0LTQtMS44LTQtNCIvPjwvZz48L2c+PC9zdmc+')] opacity-10"
       ></div>
 
@@ -66,6 +72,7 @@ const Hero = () => {
       <div className="absolute top-12 right-12 w-32 h-32 bg-secondary-500/20 rounded-full blur-3xl"></div>
       <div className="absolute bottom-32 right-8 w-16 h-16 bg-primary-300/30 rounded-full blur-xl"></div>
     </section>
+    </>
   );
 };
 

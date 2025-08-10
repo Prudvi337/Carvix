@@ -95,6 +95,19 @@
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
 @layer components {
   .cyber-button {
     @apply relative overflow-hidden bg-transparent border border-primary-500/30 text-primary-500 hover:text-white px-6 py-2 rounded-md transition-all duration-300;
